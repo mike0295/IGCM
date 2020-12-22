@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="f0fbc5d4-ca33-44e9-b847-1eec7251795a" name="mike0295@faust.snucse.org:22" url="http:///">
+        <fileTransfer accessType="SFTP" host="faust.snucse.org" port="22" sshConfigId="2611470f-496c-4027-9a41-ec51973e8494" sshConfig="mike0295@faust.snucse.org:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
