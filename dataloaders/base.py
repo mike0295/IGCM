@@ -9,6 +9,7 @@ class AbstractDataloader(metaclass=ABCMeta):
         self.args = args
         self.save_folder = dataset._get_preprocessed_folder_path()
         self.dataset = dataset.load_dataset()
+        self.adj_matrix = self.dataset['adj_matrix']
         self.train = self.dataset['train_matrix']
         self.val = self.dataset['val_matrix']
         self.test = self.dataset['test_matrix']
@@ -36,7 +37,7 @@ class AbstractDataloader(metaclass=ABCMeta):
         # print(dataset)
         dataloader = DataLoader(dataset,
                                batch_size=batch_size,
-                               shuffle=False,
+                               shuffle=True,
                                )
         return dataloader
 

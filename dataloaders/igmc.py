@@ -23,14 +23,14 @@ class IGMCDataloader(AbstractDataloader):
             return self._get_eval_dataset('test')
 
     def _get_train_dataset(self):
-        dataset = IGMCDataSet(args=self.args, matrix=self.train, sp_matrix=self.train_sparse)
+        dataset = IGMCDataSet(args=self.args, matrix=self.adj_matrix, sp_matrix=self.train_sparse)
         return dataset
 
     def _get_eval_dataset(self, mode):
         if mode == 'val':
-            dataset = IGMCDataSet(args=self.args, matrix=self.val, sp_matrix=self.val_sparse)
+            dataset = IGMCDataSet(args=self.args, matrix=self.adj_matrix, sp_matrix=self.val_sparse)
         else:
-            dataset = IGMCDataSet(args=self.args, matrix=self.test, sp_matrix=self.test_sparse)
+            dataset = IGMCDataSet(args=self.args, matrix=self.adj_matrix, sp_matrix=self.test_sparse)
         return dataset
 
 
@@ -64,6 +64,7 @@ class IGMCDataSet(Dataset):
         # start = time.time()
         u, v = self.sp_matrix[index, 0], self.sp_matrix[index, 1]
         y = self.sp_matrix[index, 2]
+        # print(u, v)
         data = extract_subgraph(self.SRI, self.SCI, u, v, y, max_nodes=self.args.max_nodes)
         # end = time.time()
         # print("get item time taken: ", end-start)

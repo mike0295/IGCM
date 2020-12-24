@@ -40,21 +40,23 @@ def trainvaltest_split(ratings, u_map, v_map, num_users, num_items):
 
     # Create labels
     labels = create_1Dlabels(ratings, num_users, num_items, u_map, v_map)
-    train_data[2] = labels[train_idx]
-    val_data[2] = labels[val_idx]
-    test_data[2] = labels[test_idx]
+    train_data[2] = labels[train_idx].astype(np.float32) + 1.
+    val_data[2] = labels[val_idx].astype(np.float32) + 1.
+    test_data[2] = labels[test_idx].astype(np.float32) + 1.
 
-    train_label_data = labels[train_idx].astype(np.float32) + 1.
-    val_label_data = labels[val_idx].astype(np.float32) + 1.
-    test_label_data = labels[test_idx].astype(np.float32) + 1.
+    train_data = np.hstack([train_data, val_data])
 
-    train_rating_matrix = sp.csr_matrix((train_label_data, [train_data[0], train_data[1]]),
+    # train_label_data = labels[train_idx].astype(np.float32) + 1.
+    # val_label_data = labels[val_idx].astype(np.float32) + 1.
+    # test_label_data = labels[test_idx].astype(np.float32) + 1.
+
+    train_rating_matrix = sp.csr_matrix((train_data[2], [train_data[0], train_data[1]]),
                                         shape=[num_users, num_items], dtype=np.float32)
 
-    val_rating_matrix = sp.csr_matrix((val_label_data, [val_data[0], val_data[1]]),
+    val_rating_matrix = sp.csr_matrix((val_data[2], [val_data[0], val_data[1]]),
                                         shape=[num_users, num_items], dtype=np.float32)
 
-    test_rating_matrix = sp.csr_matrix((test_label_data, [test_data[0], test_data[1]]),
+    test_rating_matrix = sp.csr_matrix((test_data[2], [test_data[0], test_data[1]]),
                                         shape=[num_users, num_items], dtype=np.float32)
 
     return train_rating_matrix, val_rating_matrix, test_rating_matrix

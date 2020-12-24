@@ -9,6 +9,7 @@ import shutil
 import pickle
 import pandas as pd
 import os
+import scipy.sparse as sp
 
 class AbstractDataset(metaclass=ABCMeta):
     def __init__(self, args):
@@ -50,19 +51,16 @@ class AbstractDataset(metaclass=ABCMeta):
         dataset = pickle.load(dataset_path.open('rb'))
         return dataset
 
-    def load_data(self, df, seed=1234):
+    def load_data(self, df):
         data_array = df.values.tolist()
-        # Randomly shuffle data
-        random.seed(seed)
-        random.shuffle(data_array)
         data_array = np.array(data_array)
         u_map = data_array[:, 0]
         v_map = data_array[:, 1]
         u_map, u_dict, num_users = map_data(u_map)
         v_map, v_dict, num_items = map_data(v_map)
         ratings = data_array[:, 2]
-
-        return u_map, u_dict, num_users, v_map, v_dict, num_items, ratings
+        matrix = sp.csr_matrix((ratings, (u_map, v_map)))
+        return matrix, u_map, u_dict, num_users, v_map, v_dict, num_items, ratings
 
     def preprocessing(self):
         dataset_path = self._get_preprocessed_dataset_path()
@@ -74,11 +72,12 @@ class AbstractDataset(metaclass=ABCMeta):
 
         self.download_raw_dataset()
         df = self.load_ratings_df()
-        u_map, u_dict, num_users, v_map, v_dict, num_items, ratings = self.load_data(df)
+        matrix, u_map, u_dict, num_users, v_map, v_dict, num_items, ratings = self.load_data(df)
 
         train_matrix, val_matrix, test_matrix = trainvaltest_split(ratings, u_map, v_map, num_users, num_items)
-
+        # print(train_matrix.shape, train_matrix.nnz)
         dataset = {
+                    'adj_matrix': train_matrix,
                     'train_matrix': train_matrix,
                     'val_matrix': val_matrix,
                     'test_matrix': test_matrix

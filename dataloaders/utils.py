@@ -45,8 +45,11 @@ def extract_neighbor(SRI, SCI, u, v, max_nodes):
     subgraph = SRI[u_nodes][:, v_nodes]
     subgraph[0, 0] = 0  # delete target link
     u, v, r = sp.find(subgraph)
-
+    v += len(u_nodes)
+    # print(subgraph.shape)
+    # print(min(v), max(v))
     node_labels = [0] + [2] * (len(u_nodes)-1) + [1] + [3] * (len(v_nodes)-1)
+    # print(len(u), len(node_labels))
 
     return u, v, r, node_labels
 
@@ -56,12 +59,16 @@ def neighbor(adj_matrix, node):
 
 
 def process_input(u, v, r, node_labels, max_node_label, y):
+    # r: 0~4, y: 1~5
+    # print("r:", min(r), max(r), "y:", y)
+
     u, v, r = torch.LongTensor(u), torch.LongTensor(v), torch.LongTensor(r)
     edge_index = torch.stack([torch.cat([u, v]), torch.cat([v, u])], 0)
     edge_type = torch.cat([r, r])
     # print("r: ", r)
     x = torch.FloatTensor(one_hot(node_labels, max_node_label+1))
     y = torch.FloatTensor([y])
+    # print("X: ", x.min(), x.max(), x.shape, "\nY: ", y.min(), y.max(), y.shape)
     data = Data(x=x, edge_index=edge_index, edge_type=edge_type, y=y)
     # print(data)
     return data
