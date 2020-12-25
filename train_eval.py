@@ -52,7 +52,7 @@ def train(model,
 def train_one_epoch(model, train_dataloader, optimizer, ARR):
     model.train()
     cum_loss = 0
-    for batch in train_dataloader:
+    for batch in tqdm(train_dataloader):
         optimizer.zero_grad()
         if torch.cuda.is_available():
             batch = batch.to('cuda')
