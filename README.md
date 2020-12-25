@@ -14,3 +14,4 @@ python main.py --train_igmc</pre>
 Once trained (which takes 80 epochs), the model will be saved in the model_dict folder. 
 
 
+![](https://raw.githubusercontent.com/mike0295/IGMC/main/img/img1.png)
