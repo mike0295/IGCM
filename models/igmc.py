@@ -40,7 +40,7 @@ class IGMCModel(torch.nn.Module):
         h_i = torch.cat(h_i, dim=1)
 
         u = data.x[:, 0] == 1
-        i = data.x[:, 0] == 1
+        i = data.x[:, 1] == 1
         x = torch.cat([h_i[u], h_i[i]], dim=1)
 
         x = F.relu(self.lin1(x))
