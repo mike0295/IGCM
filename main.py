@@ -34,10 +34,10 @@ if args.train_igmc:
     with open("loss_record.json", "w") as f:
         json.dump(loss_list, f)
 
-# if args.test_igmc:
-#     print("Testing with IGMC model trained w/ 80 epochs")
-#     model = IGMCModel(num_features=4)
-#     PATH = Path('model_dict/igmc_e80.zip')
-#     model.load_state_dict(torch.load(PATH))
-#     test(model, test_loader)
+if args.test_igmc:
+    print("Testing with IGMC model trained w/ 80 epochs")
+    model = IGMCModel(num_features=4)
+    PATH = Path('model_dict/igmc_e80.zip')
+    model.load_state_dict(torch.load(PATH))
+    test(model, test_loader)
 
